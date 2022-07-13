@@ -1,0 +1,28 @@
+logging:
+  level:
+    root: INFO
+server:
+  port : 8088
+  servlet:
+    context-path: /bank-challenge
+spring:
+  profiles:
+    active: "dev"
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+  liquibase:
+    enabled: false
+spring-doc:
+  swagger-ui:
+    path: /swagger-ui.html
+---
+spring:
+  config:
+    activate:
+      on-profile: "dev"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bank?currentSchema=challenge
+    username: postgres
+    password: W4dm1n7z3o@#
+    driverClassName: org.postgresql.Driver
