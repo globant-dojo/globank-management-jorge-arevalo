@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class AccountService implements IAccountService {
 
     @Autowired
@@ -28,9 +29,8 @@ public class AccountService implements IAccountService {
     IClientRepository clientRepository;
 
     @Override
-    @Transactional
     public AccountDto save(AccountInput accountInput) {
-        Client client = clientRepository.findByName(accountInput.getClientName());
+        Client client = clientRepository.getReferenceByName(accountInput.getClientName());
         if(client == null) {
             throw new NotFoundException("Client not found - Name: ".concat(accountInput.getClientName()));
         }
@@ -69,7 +69,6 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    @Transactional
     public AccountDto update(String id, AccountInput accountInput) {
         Optional<Account> accountOptional = accountRepository.findById(UUID.fromString(id));
         if(accountOptional.isEmpty()) {
@@ -84,7 +83,6 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    @Transactional
     public void delete(String id) {
         Optional<Account> accountOptional = accountRepository.findById(UUID.fromString(id));
         if(accountOptional.isEmpty()) {
@@ -94,18 +92,13 @@ public class AccountService implements IAccountService {
     }
 
     private AccountDto loadAccountData(Account account) {
-        ClientDto clientDto = ClientDto.builder()
-                .id(account.getClient().getId())
-                .name(account.getClient().getName())
-                .identification(account.getClient().getIdentification())
-                .status(account.getClient().getStatus())
-                .build();
         return AccountDto.builder()
                 .id(account.getId())
                 .accountNumber(account.getAccountNumber())
                 .accountType(account.getAccountType())
                 .initialBalance(account.getInitialBalance())
-                .clientDto(clientDto)
+                .clientId(account.getClient().getId())
+                .status(account.getStatus())
                 .build();
     }
 

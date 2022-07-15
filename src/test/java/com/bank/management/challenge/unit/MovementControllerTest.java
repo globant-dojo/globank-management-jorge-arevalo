@@ -51,30 +51,22 @@ class MovementControllerTest {
 
         movementDtoList = new ArrayList<>();
 
-        AccountDto accountDtoA = AccountDto.builder()
-                .id(UUID.randomUUID())
-                .accountNumber("567898")
-                .build();
         movementDtoA = MovementDto.builder()
                 .id(id)
                 .movementDate(actualDate)
                 .movementType("Debit")
                 .value(1.0)
                 .balance(1.0)
-                .accountDto(accountDtoA)
+                .accountId(UUID.randomUUID())
                 .build();
 
-        AccountDto accountDtoB = AccountDto.builder()
-                .id(UUID.randomUUID())
-                .accountNumber("654987")
-                .build();
         MovementDto movementDtoB = MovementDto.builder()
                 .id(UUID.randomUUID())
                 .movementDate(new Date())
                 .movementType("Credit")
                 .value(1.0)
                 .balance(1.0)
-                .accountDto(accountDtoB)
+                .accountId(UUID.randomUUID())
                 .build();
 
         movementDtoList.add(movementDtoA);
@@ -104,10 +96,8 @@ class MovementControllerTest {
     @Test
     void saveTest() {
         MovementInput movementInput = new MovementInput();
-        movementInput.setMovementDate(actualDate);
         movementInput.setMovementType("typeTestA");
         movementInput.setValue(1.0);
-        movementInput.setBalance(1.0);
         FormatInput<MovementInput> input = new FormatInput<>();
         input.setData(movementInput);
 
@@ -123,10 +113,8 @@ class MovementControllerTest {
     @Test
     void updateTest() {
         MovementInput movementInput = new MovementInput();
-        movementInput.setMovementDate(actualDate);
         movementInput.setMovementType("typeTestA");
         movementInput.setValue(1.0);
-        movementInput.setBalance(1.0);
         FormatInput<MovementInput> input = new FormatInput<>();
         input.setData(movementInput);
 

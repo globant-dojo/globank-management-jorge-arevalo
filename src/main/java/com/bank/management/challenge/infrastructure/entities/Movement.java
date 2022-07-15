@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.UUID;
 
@@ -34,6 +36,7 @@ public class Movement {
     private UUID id;
 
     @Column(name = "movement_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private Date movementDate;
 
     @Column(name = "movement_type", nullable = false, length = 20)
@@ -46,7 +49,7 @@ public class Movement {
     private Double balance;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "account_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
 }

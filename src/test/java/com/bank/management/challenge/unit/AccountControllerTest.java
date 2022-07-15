@@ -44,29 +44,21 @@ class AccountControllerTest {
 
         accountDtoList = new ArrayList<>();
 
-        ClientDto clientDtoA = ClientDto.builder()
-                .id(UUID.randomUUID())
-                .name("John Doe")
-                .build();
         accountDtoA = AccountDto.builder()
                 .id(id)
                 .accountNumber("numberTestA")
                 .accountType("typeTestA")
                 .initialBalance(1.0)
-                .clientDto(clientDtoA)
+                .clientId(UUID.randomUUID())
                 .status(true)
                 .build();
 
-        ClientDto clientDtoB = ClientDto.builder()
-                .id(UUID.randomUUID())
-                .name("Jane Doe")
-                .build();
         AccountDto accountDtoB = AccountDto.builder()
                 .id(UUID.randomUUID())
                 .accountNumber("numberTestB")
                 .accountType("typeTestB")
                 .initialBalance(1.0)
-                .clientDto(clientDtoB)
+                .clientId(UUID.randomUUID())
                 .status(true)
                 .build();
 

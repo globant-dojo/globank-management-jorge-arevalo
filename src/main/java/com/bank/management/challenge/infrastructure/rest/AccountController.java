@@ -36,7 +36,7 @@ import java.util.UUID;
 public class AccountController {
 
     @Autowired
-    private IAccountService accountService;
+    IAccountService accountService;
 
     @GetMapping
     @Operation(description = "List of all accounts")

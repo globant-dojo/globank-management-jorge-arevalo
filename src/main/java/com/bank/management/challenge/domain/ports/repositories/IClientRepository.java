@@ -12,7 +12,7 @@ public interface IClientRepository {
 
     Optional<Client> findById(UUID id);
 
-    Client findByName(String name);
+    Client getReferenceByName(String name);
 
     List<Client> findAll();
 

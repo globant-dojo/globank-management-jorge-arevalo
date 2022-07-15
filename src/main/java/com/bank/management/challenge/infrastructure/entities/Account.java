@@ -45,7 +45,7 @@ public class Account {
     private Boolean status;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
-    @JoinColumn(name = "client_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
 }

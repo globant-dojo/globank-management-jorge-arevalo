@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class MovementService implements IMovementService {
 
     @Autowired
@@ -30,19 +31,19 @@ public class MovementService implements IMovementService {
     IAccountRepository accountRepository;
 
     @Override
-    @Transactional
     public MovementDto save(MovementInput movementInput) {
-        Account account = accountRepository.findByAccountNumber(movementInput.getAccountInput().getAccountNumber());
+        Account account = accountRepository.getReferenceByAccountNumber(movementInput.getAccountNumber());
         if(account == null) {
-            throw new NotFoundException("Account not found - Account number: ".concat(movementInput.getAccountInput().getAccountNumber()));
+            throw new NotFoundException("Account not found - Account number: ".concat(movementInput.getAccountNumber()));
         }
         Movement movement = Movement.builder()
                 .movementDate(new Date())
                 .movementType(movementInput.getMovementType())
                 .value(movementInput.getValue())
-                .balance(calculateBalance(movementInput))
-                .account(account)
                 .build();
+        calculateBalance(movement, account);
+        account = accountRepository.save(account);
+        movement.setAccount(account);
         return loadMovementData(movementRepository.save(movement));
     }
 
@@ -71,61 +72,86 @@ public class MovementService implements IMovementService {
     }
 
     @Override
-    @Transactional
     public MovementDto update(String id, MovementInput movementInput) {
         Optional<Movement> movementOptional = movementRepository.findById(UUID.fromString(id));
         if(movementOptional.isEmpty()) {
             throw new NotFoundException("Movement not found - Id # ".concat(id));
         }
         Movement movement = movementOptional.get();
-        movement.setMovementDate(movementInput.getMovementDate());
+        Optional<Account> accountOptional = accountRepository.findById(movementOptional.get().getId());
+        if(accountOptional.isEmpty()) {
+            throw new NotFoundException("Account not found - Id # ".concat(movementOptional.get().getId().toString()));
+        }
+        Account account = accountOptional.get();
+        calculateRollBackBalance(movement, account);
         movement.setMovementType(movementInput.getMovementType());
         movement.setValue(movementInput.getValue());
-        movement.setBalance(movementInput.getBalance());
+        calculateBalance(movement, account);
+        account = accountRepository.save(account);
+        movement.setAccount(account);
         return loadMovementData(movementRepository.save(movement));
     }
 
     @Override
-    @Transactional
     public void delete(String id) {
         Optional<Movement> movementOptional = movementRepository.findById(UUID.fromString(id));
         if(movementOptional.isEmpty()) {
             throw new NotFoundException("Movement not found - Id # ".concat(id));
         }
+        Movement movement = movementOptional.get();
+        Optional<Account> accountOptional = accountRepository.findById(movement.getAccount().getId());
+        Account account = accountOptional.get();
+        calculateRollBackBalance(movement, account);
+        account = accountRepository.save(account);
         movementRepository.delete(movementOptional.get());
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<MovementDto> findByMovementDateBetween(Date initialDate, Date finalDate) {
+        List<Movement> movementList = movementRepository.findByMovementDateBetween(initialDate, finalDate);
+        if(movementList.isEmpty()) {
+            throw new NotFoundException("Movements not found");
+        }
+        List<MovementDto> movementDtoList = new ArrayList<>();
+        for(Movement movement : movementList) {
+            movementDtoList.add(loadMovementData(movement));
+        }
+        return movementDtoList;
+    }
+
     private MovementDto loadMovementData(Movement movement) {
-        AccountDto accountDto = AccountDto.builder()
-                .id(movement.getAccount().getId())
-                .accountNumber(movement.getAccount().getAccountNumber())
-                .accountType(movement.getAccount().getAccountType())
-                .initialBalance(movement.getAccount().getInitialBalance())
-                .build();
         return MovementDto.builder()
                 .id(movement.getId())
                 .movementDate(movement.getMovementDate())
                 .movementType(movement.getMovementType())
                 .value(movement.getValue())
                 .balance(movement.getBalance())
-                .accountDto(accountDto)
+                .accountId(movement.getAccount().getId())
                 .build();
     }
 
-    private Double calculateBalance(MovementInput movementInput) {
-        Double newBalance = 0D;
-        if (movementInput.getMovementType().equals("Debit")) {
-            if(movementInput.getAccountInput().getInitialBalance() > 0D
-                    && movementInput.getAccountInput().getInitialBalance() > movementInput.getValue()) {
-                newBalance = movementInput.getAccountInput().getInitialBalance() - movementInput.getValue();
+    private void calculateBalance(Movement movement, Account account) {
+        if (movement.getMovementType().equals("Debit")) {
+            if(account.getInitialBalance() > 0D && account.getInitialBalance() >= movement.getValue()) {
+                movement.setBalance(account.getInitialBalance() - movement.getValue());
             }
             else {
                 throw new NotAvailableBalance("Not available balance");
             }
-        } else if(movementInput.getMovementType().equals("Credit")) {
-            newBalance = movementInput.getAccountInput().getInitialBalance() + movementInput.getValue();
+        } else if(movement.getMovementType().equals("Credit")) {
+            movement.setBalance(account.getInitialBalance() + movement.getValue());
         }
-        return newBalance;
+        account.setInitialBalance(movement.getBalance());
+    }
+
+    private void calculateRollBackBalance(Movement movement, Account account) {
+        if (movement.getMovementType().equals("Debit")) {
+            movement.setBalance(account.getInitialBalance() + movement.getValue());
+        } else if(movement.getMovementType().equals("Credit")) {
+            movement.setBalance(account.getInitialBalance() - movement.getValue());
+        }
+        account.setInitialBalance(movement.getBalance());
     }
 
 }

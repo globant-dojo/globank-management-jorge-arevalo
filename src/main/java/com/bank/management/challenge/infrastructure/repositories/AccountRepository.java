@@ -27,7 +27,10 @@ public class AccountRepository implements IAccountRepository {
     }
 
     @Override
-    public Account findByAccountNumber(String accountNumber) { return accountJpa.findByAccountNumber(accountNumber).get(0); }
+    public Account getReferenceByAccountNumber(String accountNumber) { return accountJpa.getReferenceByAccountNumber(accountNumber); }
+
+    @Override
+    public List<Account> findByClientId(UUID clientId) { return accountJpa.findByClientId(clientId); }
 
     @Override
     public List<Account> findAll() {

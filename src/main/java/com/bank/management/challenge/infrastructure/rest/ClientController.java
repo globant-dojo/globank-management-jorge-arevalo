@@ -36,7 +36,7 @@ import java.util.UUID;
 public class ClientController {
 
     @Autowired
-    private IClientService clientService;
+    IClientService clientService;
 
     @GetMapping
     @Operation(description = "List of all clients")

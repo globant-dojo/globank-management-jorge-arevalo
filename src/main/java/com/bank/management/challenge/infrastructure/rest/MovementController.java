@@ -36,7 +36,7 @@ import java.util.UUID;
 public class MovementController {
 
     @Autowired
-    private IMovementService movementService;
+    IMovementService movementService;
 
     @GetMapping
     @Operation(description = "List of all movements")

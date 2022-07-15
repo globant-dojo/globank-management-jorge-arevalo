@@ -17,6 +17,6 @@ public class MovementDto {
     private String movementType;
     private Double value;
     private Double balance;
-    private AccountDto accountDto;
+    private UUID accountId;
 
 }

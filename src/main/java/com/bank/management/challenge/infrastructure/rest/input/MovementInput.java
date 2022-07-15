@@ -13,8 +13,6 @@ import java.util.Date;
 @Setter
 public class MovementInput {
 
-    private Date movementDate;
-
     @NotEmpty
     @Size(min = 3, max = 20)
     private String movementType;
@@ -22,9 +20,7 @@ public class MovementInput {
     @NotNull
     private Double value;
 
-    private  Double balance;
-
     @Valid
-    private AccountInput accountInput;
+    private String accountNumber;
 
 }

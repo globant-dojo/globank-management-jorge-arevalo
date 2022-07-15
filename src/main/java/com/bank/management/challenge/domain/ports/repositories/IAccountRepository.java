@@ -12,7 +12,9 @@ public interface IAccountRepository {
 
     Optional<Account> findById(UUID id);
 
-    Account findByAccountNumber(String accountNumber);
+    Account getReferenceByAccountNumber(String accountNumber);
+
+    List<Account> findByClientId(UUID clientId);
 
     List<Account> findAll();
 

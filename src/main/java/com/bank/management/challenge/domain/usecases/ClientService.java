@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
+@Transactional
 public class ClientService implements IClientService {
 
     @Autowired
@@ -61,7 +62,6 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    @Transactional
     public ClientDto update(String id, ClientInput clientInput) {
         Optional<Client> clientOptional = clientRepository.findById(UUID.fromString(id));
         if(clientOptional.isEmpty()) {
@@ -80,7 +80,6 @@ public class ClientService implements IClientService {
     }
 
     @Override
-    @Transactional
     public void delete(String id) {
         Optional<Client> clientOptional = clientRepository.findById(UUID.fromString(id));
         if(clientOptional.isEmpty()) {

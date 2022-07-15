@@ -37,8 +37,8 @@ public class ClientRepository implements IClientRepository {
     }
 
     @Override
-    public Client findByName(String name) {
-        return clientJpa.findByName(name).get(0);
+    public Client getReferenceByName(String name) {
+        return clientJpa.getReferenceByName(name);
     }
 
 }

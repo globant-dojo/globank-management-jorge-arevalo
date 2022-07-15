@@ -6,6 +6,7 @@ import com.bank.management.challenge.infrastructure.repositories.jpa.MovementJpa
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +35,11 @@ public class MovementRepository implements IMovementRepository {
     @Override
     public void delete(Movement movement) {
         movementJpa.delete(movement);
+    }
+
+    @Override
+    public List<Movement> findByMovementDateBetween(Date initialDate, Date finalDate) {
+        return movementJpa.findByMovementDateBetween(initialDate, finalDate);
     }
 
 }
