@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-1">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-1">
         <createTable tableName="account">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="accountPK"/>
@@ -22,7 +22,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-2">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-2">
         <createTable tableName="client">
             <column name="password" type="VARCHAR(50)">
                 <constraints nullable="false"/>
@@ -35,7 +35,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-3">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-3">
         <createTable tableName="movement">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="movementPK"/>
@@ -57,7 +57,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-4">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-4">
         <createTable tableName="person">
             <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="personPK"/>
@@ -80,13 +80,13 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-5">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-5">
         <addForeignKeyConstraint baseColumnNames="client_id" baseTableName="account" constraintName="FKkm8yb63h4ownvnlrbwnadntyn" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="client" validate="true"/>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-6">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-6">
         <addForeignKeyConstraint baseColumnNames="account_id" baseTableName="movement" constraintName="FKoemeananv9w9qnbcoccbl70a0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="account" validate="true"/>
     </changeSet>
-    <changeSet author="jorge.arevalo (generated)" id="1657864844239-7">
+    <changeSet author="jorge.arevalo (generated)" id="1657886065788-7">
         <addForeignKeyConstraint baseColumnNames="id" baseTableName="client" constraintName="FKr1e0j10i9v9i52l6tqfa69nj0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="person" validate="true"/>
     </changeSet>
 </databaseChangeLog>
