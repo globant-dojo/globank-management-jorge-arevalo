@@ -1,6 +1,5 @@
 package com.bank.management.challenge.domain.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
