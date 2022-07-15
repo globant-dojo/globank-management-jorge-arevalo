@@ -121,7 +121,7 @@ public class ClientController {
         HttpStatus status = HttpStatus.OK;
         clientService.delete(id);
         FormatMessage message = new FormatMessage(String.valueOf(status.value()), status.getReasonPhrase());
-        FormatOutput<ClientDto> formatOutput = new FormatOutput<>(null, List.of(message));
+        FormatOutput<ClientDto> formatOutput = new FormatOutput<>(ClientDto.builder().build(), List.of(message));
         return new ResponseEntity<>(formatOutput, status);
     }
 
